@@ -16,7 +16,7 @@ const insertProducto = async (newProducto) => {
         id: uuid()
     }
     try {
-        const { rows } = await pool.query('INSERT INTO productos (producto_id,producto_nombre,producto_precio,producto_cantidad) VALUES($1,$2,$3,$4) RETURNING *', [producto.id, producto.nombre, producto.precio, producto.cantiad]);
+        const { rows } = await pool.query('INSERT INTO productos (producto_id,producto_nombre,producto_precio,producto_cantidad) VALUES($1,$2,$3,$4) RETURNING *', [producto.id, producto.nombre, producto.precio, producto.cantidad]);
         return { success: true, message: 'Producto insertado correctamente' };
     } catch (error) {
         console.error('Error al insertar', error);
