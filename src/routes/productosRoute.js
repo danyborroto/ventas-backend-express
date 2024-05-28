@@ -10,7 +10,7 @@ const { selectAllProducts,
 router.get('/', selectAllProducts);
 router.get('/:id', selectOneProduct);
 router.post('/', insertProduct);
-router.patch('/:id', updateProduct);
+router.put('/:id', updateProduct);
 router.delete('/:id', deleteProduct);
 
 module.exports = router;

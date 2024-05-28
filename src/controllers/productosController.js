@@ -5,8 +5,10 @@ const selectAllProducts = async (req, res) => {
     res.status(200).json(result)
 }
 
-const selectOneProduct = (req, res) => {
-    return;
+const selectOneProduct = async (req, res) => {
+    const { id } = req.params;
+    const result = await service.selectOne(id);
+    res.status(200).json(result);
 }
 
 const insertProduct = async (req, res) => {
@@ -21,8 +23,16 @@ const insertProduct = async (req, res) => {
     res.status(200).json(result);
 }
 
-const updateProduct = (req, res) => {
-    return;
+const updateProduct = async (req, res) => {
+    const { body } = req;
+    let { id } = req.params;
+    let producto = {
+        nombre: body.nombre,
+        precio: body.precio,
+        cantidad: body.cantidad
+    }
+    const result = await service.updateProducto(id, producto);
+    res.status(200).json(result);
 }
 const deleteProduct = (req, res) => {
     return;

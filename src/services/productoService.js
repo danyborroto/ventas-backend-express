@@ -10,6 +10,16 @@ const selectAll = async () => {
     }
 }
 
+const selectOne = async (id) => {
+    try {
+        const { rows } = await pool.query('SELECT * FROM productos WHERE producto_id=$1', [id]);
+        return rows;
+
+    } catch (error) {
+        console.error('No se pudo seleccionar el producto', error);
+    }
+}
+
 const insertProducto = async (newProducto) => {
     let producto = {
         ...newProducto,
@@ -23,7 +33,35 @@ const insertProducto = async (newProducto) => {
     }
 }
 
+const updateProducto = async (id, newProducto) => {
+    producto = {
+        ...newProducto,
+        id: id
+    }
+    try {
+        let query = "UPDATE productos SET producto_nombre=$2, producto_precio=$3, producto_cantidad=$4 WHERE producto_id=$1";
+        let values = [producto.id, producto.nombre, producto.precio, producto.cantidad];
+        const { rows } = await pool.query(query, values);
+        return { success: true, message: 'Producto actualizado correctamente' }
+
+    } catch (error) {
+        console.error('No se pudo actualizar el producto', error);
+    }
+}
+
+const deleteProducto = async (id) => {
+    try {
+        const { rows } = await pool.query('DELETE FROM productos WHERE producto_id=$1', [id]);
+        return { success: true, message: 'Eliminado correctamente' };
+    } catch (error) {
+        console.error('No se pudo eliminar el producto', error);
+    }
+}
+
 module.exports = {
     selectAll,
-    insertProducto
+    selectOne,
+    insertProducto,
+    updateProducto,
+    deleteProducto
 }
