@@ -51,8 +51,22 @@ const updateProducto = async (id, newProducto) => {
 
 const deleteProducto = async (id) => {
     try {
-        const { rows } = await pool.query('DELETE FROM productos WHERE producto_id=$1', [id]);
-        return { success: true, message: 'Eliminado correctamente' };
+        /*const { rows } = await pool.query('DELETE FROM productos WHERE producto_id=$1', [id]);
+        return { success: true, message: 'Eliminado correctamente' };*/
+        const result = await selectOne(id);
+        let producto = {
+            id: result[0].producto_id,
+            nombre: result[0].producto_nombre,
+            precio: result[0].producto_precio,
+            cantidad: result[0].producto_cantidad
+        }
+        if (producto.cantidad === 1) {
+            const { rows } = await pool.query('DELETE FROM productos WHERE producto_id=$1', [id]);
+            return { success: true, message: 'Eliminado correctamente' };
+        } else {
+            producto.cantidad = producto.cantidad - 1;
+            const result = await updateProducto(producto.id, producto);
+        }
     } catch (error) {
         console.error('No se pudo eliminar el producto', error);
     }
